@@ -208,6 +208,13 @@ docker ps
 ## Thực hành áp dụng: APP MONITOR + ALERT DATA REALTIME
 ## 1. 🐳 DOCKER COMPOSE – KHỞI ĐỘNG SERVICES
 
+### Những Lưu Ý Nằm Lòng Cho Lần Sau (Trước Khi docker-compose up -d)
+Để các dự án sau này chạy mượt mà ngay từ lần đầu tiên, trước khi gõ lệnh up, bạn hãy tạo thành thói quen kiểm tra các yếu tố sau:
+Luôn kiểm tra dung lượng đĩa trước: Gõ df -h để chắc chắn ổ cứng còn trống tối thiểu vài GB. Nếu thấy phân vùng bị bóp nhỏ (như lỗi 14GB vừa rồi), hãy dùng lệnh lvextend và resize2fs để nới rộng ra ngay từ đầu.
+Không để file cấu hình trống: Khi clone hoặc tạo cấu hình có chứa thuộc tính build:, hãy đảm bảo file Dockerfile đã được viết nội dung, không để file trống 0 bytes.
+Mẹo tải Image khi mạng yếu: Nếu mạng chập chờn, thay vì gõ thẳng docker-compose up -d, hãy chủ động kéo trước các image nặng bằng lệnh lẻ: docker pull <tên_image>. Khi các khối dữ liệu lớn đã nằm an toàn trên máy, việc chạy lệnh up sẽ không bao giờ lo bị lỗi kết nối nữa.
+Kiểm tra DNS của Server: Đảm bảo file /etc/resolv.conf luôn trỏ về các DNS mạnh như 8.8.8.8 hoặc 1.1.1.1 để tránh server bị mất phương hướng khi tìm tên miền của các dịch vụ quốc tế.
+
 ### 1.1  Nội dung file `docker-compose.yml` (mở trong editor hoặc terminal `cat docker-compose.yml`)  
 ```yaml
 version: '3.8'
@@ -317,41 +324,52 @@ networks:
 ---
 
 ## 2. 🔄 NODE-RED – LẤY DỮ LIỆU THỰC TẾ
+### 2.1  Giao diện Node-RED Editor — toàn bộ flow đang chạy (các node kết nối nhau)
+<img width="1902" height="1068" alt="image" src="https://github.com/user-attachments/assets/30feeed0-54c6-4af1-8a70-6acc362b9d7b" />
 
-| # | Nội dung cần chụp | Tên file gợi ý |
-|---|---|---|
-| 2.1 | Giao diện Node-RED Editor — toàn bộ flow đang chạy (các node kết nối nhau) | `04_nodered-flow-overview.png` |
-| 2.2 | Cấu hình node lấy dữ liệu (HTTP Request / API node) — URL nguồn dữ liệu thực (chứng khoán/thời tiết/giá vàng) | `05_nodered-datasource-config.png` |
-| 2.3 | Debug panel Node-RED — hiển thị dữ liệu thực đang được nhận về (có giá trị số thực tế, timestamp) | `06_nodered-debug-data.png` |
-| 2.4 | Node-RED đang **chạy liên tục** — inject node trigger theo interval (chụp lúc đang chạy, thấy timestamp mới) | `07_nodered-interval-trigger.png` |
+### 2.2  Cấu hình node lấy dữ liệu (HTTP Request / API node) — URL nguồn dữ liệu thực (chứng khoán)
+<img width="1913" height="1058" alt="image" src="https://github.com/user-attachments/assets/ef969a2f-88de-4ebf-9a3b-c5e0d1725a5f" />
+
+### 2.3  Debug panel Node-RED — hiển thị dữ liệu thực đang được nhận về (có giá trị số thực tế, timestamp)  
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/289f0734-fa4d-418f-bcce-4c7d56e39791" />
+
+### 2.4  Node-RED đang **chạy liên tục** — inject node trigger theo interval
+<img width="1912" height="1080" alt="image" src="https://github.com/user-attachments/assets/d2ccba27-493e-4361-b321-1e305dea190c" />
+
 
 ---
 
 ## 3. 🗄️ DATABASE – LƯU TRỮ DỮ LIỆU
 
 ### 3a. MariaDB (giá trị tức thời)
+#### 3.1  Cấu hình node MariaDB trong Node-RED (host, database, table) 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/72be570d-4ac7-4e18-bfab-8cc4f67499b9" />
 
-| # | Nội dung cần chụp | Tên file gợi ý |
-|---|---|---|
-| 3.1 | Cấu hình node MariaDB trong Node-RED (host, database, table) | `08_nodered-mariadb-node.png` |
-| 3.2 | Truy vấn trong MariaDB — `SELECT * FROM <table> ORDER BY id DESC LIMIT 10;` — thấy dữ liệu đã được lưu | `09_mariadb-data-query.png` |
+#### 3.2 Truy vấn trong MariaDB — `SELECT * FROM <table> ORDER BY id DESC LIMIT 10;` — thấy dữ liệu đã được lưu 
+<img width="1887" height="1080" alt="image" src="https://github.com/user-attachments/assets/eff4ae6c-4e52-43d4-b0c4-b9ee16be8011" />
 
 ### 3b. InfluxDB (lịch sử)
 
-| # | Nội dung cần chụp | Tên file gợi ý |
-|---|---|---|
-| 3.3 | Cấu hình node InfluxDB trong Node-RED (bucket, measurement) | `10_nodered-influxdb-node.png` |
-| 3.4 | Giao diện InfluxDB UI (`:8086`) — Data Explorer hiển thị dữ liệu lịch sử đã được ghi vào | `11_influxdb-data-explorer.png` |
+#### 3.3 Cấu hình node InfluxDB trong Node-RED (bucket, measurement)
+<img width="1918" height="1080" alt="image" src="https://github.com/user-attachments/assets/4935fe4a-6558-4862-b907-117472ecf362" />
+<img width="1917" height="1063" alt="image" src="https://github.com/user-attachments/assets/24f67951-8afe-4bc7-995e-1209ee221493" />
+
+#### 3.4  Giao diện InfluxDB UI (`:8086`) — Data Explorer hiển thị dữ liệu lịch sử đã được ghi vào 
+<img width="1920" height="1076" alt="image" src="https://github.com/user-attachments/assets/86442ad9-5e68-404a-a816-5d4faca9e333" />
 
 ---
 
 ## 4. 📊 GRAFANA – BIỂU ĐỒ TRỰC QUAN HOÁ
+### 4.1 Cấu hình Data Source InfluxDB trong Grafana (Settings → Data Sources — trạng thái **Data source connected**)
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/2c74438f-88bf-492a-a17f-f6625e59352f" />
 
-| # | Nội dung cần chụp | Tên file gợi ý |
-|---|---|---|
-| 4.1 | Cấu hình Data Source InfluxDB trong Grafana (Settings → Data Sources — trạng thái **Data source connected**) | `12_grafana-datasource-ok.png` |
-| 4.2 | Dashboard Grafana — biểu đồ thể hiện dữ liệu lịch sử theo thời gian (time series chart có dữ liệu thực) | `13_grafana-dashboard-chart.png` |
-| 4.3 | Cấu hình **Alert Rule** trong Grafana — thiết lập ngưỡng ALERT LOW / ALERT HIGH | `14_grafana-alert-rule.png` |
+### 4.2 Dashboard Grafana — biểu đồ thể hiện dữ liệu lịch sử theo thời gian (time series chart có dữ liệu thực) 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b6b22943-d8f7-41b2-8217-fafecf1df12d" />
+
+### 4.3 Cấu hình **Alert Rule** trong Grafana — thiết lập ngưỡng ALERT LOW / ALERT HIGH 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b2f9c074-a8fe-4494-9d65-3084fdb4cfda" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/014ea07c-c9c2-4465-b4e9-dfef359a03c5" />
+
 
 ---
 
@@ -408,12 +426,7 @@ networks:
 ---
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/66e425db-b755-4a7c-8a60-4e2284637eaa" />
 
-### Những Lưu Ý Nằm Lòng Cho Lần Sau (Trước Khi docker-compose up -d)
-Để các dự án sau này chạy mượt mà ngay từ lần đầu tiên, trước khi gõ lệnh up, bạn hãy tạo thành thói quen kiểm tra các yếu tố sau:
-Luôn kiểm tra dung lượng đĩa trước: Gõ df -h để chắc chắn ổ cứng còn trống tối thiểu vài GB. Nếu thấy phân vùng bị bóp nhỏ (như lỗi 14GB vừa rồi), hãy dùng lệnh lvextend và resize2fs để nới rộng ra ngay từ đầu.
-Không để file cấu hình trống: Khi clone hoặc tạo cấu hình có chứa thuộc tính build:, hãy đảm bảo file Dockerfile đã được viết nội dung, không để file trống 0 bytes.
-Mẹo tải Image khi mạng yếu: Nếu mạng chập chờn, thay vì gõ thẳng docker-compose up -d, hãy chủ động kéo trước các image nặng bằng lệnh lẻ: docker pull <tên_image>. Khi các khối dữ liệu lớn đã nằm an toàn trên máy, việc chạy lệnh up sẽ không bao giờ lo bị lỗi kết nối nữa.
-Kiểm tra DNS của Server: Đảm bảo file /etc/resolv.conf luôn trỏ về các DNS mạnh như 8.8.8.8 hoặc 1.1.1.1 để tránh server bị mất phương hướng khi tìm tên miền của các dịch vụ quốc tế.
+
 
 ### + QUAN SÁT DỮ LIỆU LỊCH SỬ => GIÁ TRỊ BẤT THƯỜNG
        (VD MIỀN A..B: OK, DƯỚI A: ALERT LOW, TRÊN B: ALERT HIGH)
