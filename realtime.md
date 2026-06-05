@@ -363,5 +363,82 @@ Kiểm tra container:   docker ps
 
 #### Tạo bảng
 <img width="1912" height="1080" alt="image" src="https://github.com/user-attachments/assets/69078701-bf2c-49cd-9c33-54f848ab006f" />
-### 7. 
+### 7. Cấu hình InfluxDB
+#### Cấu hình node InfluxDB trong Node-RED (bucket, measurement)
+<img width="1918" height="1080" alt="image" src="https://github.com/user-attachments/assets/4935fe4a-6558-4862-b907-117472ecf362" />
+<img width="1917" height="1063" alt="image" src="https://github.com/user-attachments/assets/24f67951-8afe-4bc7-995e-1209ee221493" />
 
+#### Giao diện InfluxDB UI (`:8086`) — Data Explorer hiển thị dữ liệu lịch sử đã được ghi vào 
+<img width="1920" height="1076" alt="image" src="https://github.com/user-attachments/assets/86442ad9-5e68-404a-a816-5d4faca9e333" />
+
+### 8.Node-RED
+#### Cài thêm node: Menu → Manage palette → Install
+
+Cài:
+
+node-red-node-mysql
+node-red-contrib-influxdb
+node-red-contrib-telegrambot
+#### Flow Node-RED
+ <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0e6eb34e-0b80-4f62-833e-6879bc1e8824" />
+
+#### Function xử lý ALERT
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/764e2736-9765-4f86-8243-e8c40e14a7fc" />
+
+#### Cấu hình MySQL Node
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7f3fd4c0-f78a-4f3e-aa87-1dee76db3466" />
+
+#### Cấu hình Telegram node
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/87dee313-7ab3-4478-8052-76d6e3d17da2" />
+
+#### Tin nhắn Telegram Alert
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b96398ee-3eb7-4086-9655-8ab9398dfff7" />
+
+### 9.Grafana
+<img width="1920" height="1079" alt="image" src="https://github.com/user-attachments/assets/c07a635c-1e87-486d-b823-5fd221d5ee58" />
+
+#### Tạo Dashboard Grafana
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/378da7ff-a3ab-4ae6-9c6c-0fd2ebe1c594" />
+
+### 10. Front-end hoàn chỉnh
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/29192d03-177d-4e01-97f1-213143be0bef" />
+
+### 11. Backup Docker Image
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/29ba2570-9cd8-4c49-a59e-aa9de9785841" />
+<img width="1917" height="1080" alt="image" src="https://github.com/user-attachments/assets/59824eec-2f55-42f5-9178-a86cfce7ffee" />
+
+### 12, Restore Container
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d85817a5-3e02-4747-8f7b-ffc63f063464" />
+#### Kết quả đạt được
+
+Sau khi hoàn thành bài thực hành, hệ thống realtime monitor đã hoạt động thành công với đầy đủ chức năng.
+
+Các kết quả đạt được gồm:
+
+Hệ thống tự động lấy dữ liệu giá Bitcoin realtime từ API bên ngoài.
+Node-RED xử lý dữ liệu và tự động kiểm tra ngưỡng cảnh báo.
+Dữ liệu realtime được lưu vào MariaDB.
+Dữ liệu lịch sử được lưu vào InfluxDB.
+Telegram Bot gửi cảnh báo ALERT khi giá vượt ngưỡng.
+Grafana hiển thị biểu đồ lịch sử theo thời gian thực.
+Flask API trả dữ liệu JSON cho Front-end.
+Front-end hiển thị:
+Giá Bitcoin realtime
+Trạng thái cảnh báo
+Biểu đồ lịch sử Grafana
+Toàn bộ hệ thống hoạt động bằng Docker Compose.
+Hệ thống có thể backup và restore bằng Docker image.
+
+Trong quá trình thực hiện đã làm quen với:
+
+Docker
+Docker Compose
+Node-RED
+MariaDB
+InfluxDB
+Grafana
+Flask API
+Telegram Bot
+REST API
+
+Qua bài thực hành hiểu rõ hơn cách xây dựng một hệ thống giám sát dữ liệu realtime hoàn chỉnh bằng mô hình microservice sử dụng container Docker.
