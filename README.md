@@ -409,6 +409,7 @@ node-red-contrib-telegrambot
 
 ### 12, Restore Container
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d85817a5-3e02-4747-8f7b-ffc63f063464" />
+
 #### Kết quả đạt được
 
 Sau khi hoàn thành bài thực hành, hệ thống realtime monitor đã hoạt động thành công với đầy đủ chức năng.
