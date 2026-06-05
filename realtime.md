@@ -226,4 +226,142 @@ Nguồn dữ liệu thực tế (API giá vàng / thời tiết / chứng khoán
 ```
 
 ---
+## 1. Tạo thư mục project
+Bước 1
+-Tạo thư mục:
+mkdir realtime-monitor
+cd realtime-monitor
+
+mkdir flask_api
+mkdir web
+mkdir mariadb_data
+mkdir influxdb_data
+mkdir grafana_data
+mkdir nodered_data
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/788998eb-e409-4062-8dc0-b3d57e911137" />
+## 2. Tạo docker-compose.yml
+tạo file:    nano docker-compose.yml
+```yaml
+version: '3.8'
+
+services:
+
+  # 1. Node-RED: lấy dữ liệu thực tế và điều phối toàn bộ luồng
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered_data:/data
+    networks:
+      - app_net
+
+  # 2. MariaDB: lưu giá trị tức thời
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: realtime_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_net
+
+  # 3. InfluxDB: lưu dữ liệu lịch sử (time-series)
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    volumes:
+      - influx_data:/var/lib/influxdb2
+    networks:
+      - app_net
+
+  # 4. Grafana: trực quan hoá dữ liệu lịch sử
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app_net
+
+  # 5. Flask API: trả dữ liệu tức thời từ MariaDB cho Frontend
+  flask-api:
+    build: ./flask-api
+    container_name: flask-api
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mariadb
+    networks:
+      - app_net
+
+  # 6. Nginx: webserver phục vụ trang HTML frontend
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - flask-api
+      - grafana
+    networks:
+      - app_net
+
+volumes:
+  nodered_data:
+  db_data:
+  influx_data:
+  grafana_data:
+
+networks:
+  app_net:
+    driver: bridge
+```
+
+---
+<img width="1916" height="1080" alt="image" src="https://github.com/user-attachments/assets/feb7b0e0-5420-43fd-be7f-449bbe655211" />
+
+### 3. Tạo Flask API
+#### Tạo Dockerfile: nano flask_api/Dockerfile
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c6e7c8f1-cfe9-410e-8309-36022eccccad" />
+
+#### Tạo file: nano flask_api/app.py
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8cebee7f-86fc-4b14-b77f-805e64df1df6" />
+
+### 4. Tạo giao diện web
+#### Tạo file:   nano web/index.html
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9534be60-949f-419f-9a11-c8a2d92812a9" />
+
+### 5. Chạy Docker Compose
+Chạy toàn bộ hệ thống:  docker-compose up -d --build
+
+Kiểm tra container:   docker ps
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f6fe1921-ae95-4f84-843a-2a1eabafd3eb" />
+
+### 6. Tạo database MariaDB bằng DBeaver
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/77566e8b-9e35-4030-928c-380075da0b78" />
+
+#### Tạo bảng
+<img width="1912" height="1080" alt="image" src="https://github.com/user-attachments/assets/69078701-bf2c-49cd-9c33-54f848ab006f" />
+### 7. 
 
