@@ -400,14 +400,23 @@ node-red-contrib-telegrambot
 #### Tạo Dashboard Grafana
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/378da7ff-a3ab-4ae6-9c6c-0fd2ebe1c594" />
 
-### 10. Front-end hoàn chỉnh
+### 10.  Front-end hoàn chỉnh
+Front-end được xây dựng bằng HTML, CSS và JavaScript.
+Trang web sử dụng Fetch API để gọi Flask API theo thời gian thực, hiển thị giá Bitcoin và trạng thái cảnh báo ALERT.
+Ngoài ra hệ thống còn nhúng Dashboard Grafana bằng iframe để hiển thị biểu đồ lịch sử trực quan.
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/29192d03-177d-4e01-97f1-213143be0bef" />
 
-### 11. Backup Docker Image
+### 11. Cấu hình Nginx
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b33d5c04-6392-42fd-a4b1-98926cf530dd" />
+
+### Chạy link kiểm tra web
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/649b4e71-72fa-4573-875c-70d5ea0b7ae6" />
+
+### 12. Backup Docker Image
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/29ba2570-9cd8-4c49-a59e-aa9de9785841" />
 <img width="1917" height="1080" alt="image" src="https://github.com/user-attachments/assets/59824eec-2f55-42f5-9178-a86cfce7ffee" />
 
-### 12, Restore Container
+### 13, Restore Container
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d85817a5-3e02-4747-8f7b-ffc63f063464" />
 
 #### Kết quả đạt được
